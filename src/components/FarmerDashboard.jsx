@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCrops } from './../Context/CropContext';
+import bgImage from './bg2.png';
 
 function FarmerDashboard() {
   const { crops, addCrop } = useCrops();
@@ -11,19 +12,19 @@ function FarmerDashboard() {
     if (newCrop.name && newCrop.price && newCrop.description && newCrop.quantity && newCrop.image) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64Image = reader.result; // Base64 string of the image
+        const base64Image = reader.result;
         const cropToAdd = { ...newCrop, id, status: 'available', image: base64Image };
-        
+
         // Add crop to context and localStorage
         addCrop(cropToAdd);
         const storedCrops = JSON.parse(localStorage.getItem('crops')) || [];
         localStorage.setItem('crops', JSON.stringify([...storedCrops, cropToAdd]));
-        
+
         // Reset the form
         setNewCrop({ name: '', price: '', description: '', quantity: '', image: null });
         setPopupOpen(false);
       };
-      reader.readAsDataURL(newCrop.image); // Read image as Base64 string
+      reader.readAsDataURL(newCrop.image);
     } else {
       alert('Please fill in all fields.');
     }
@@ -32,35 +33,50 @@ function FarmerDashboard() {
   return (
     <div className="h-screen flex">
       {/* Left section for add new crop */}
-      <div className="w-1/3 bg-green-900 text-white p-8">
-        <h1 className="text-3xl font-bold mb-4">Selling Your Crops Become Simple</h1>
-        <p className="mb-8">Parkitup Provides You to book the Best Parking Slots Available at your desired Location</p>
-        <button onClick={() => setPopupOpen(true)} className="bg-green-500 px-4 py-2 rounded">List New</button>
+      <div
+        className="w-1/3 bg-green-900 text-white p-8 relative"
+        style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        {/* Black Overlay */}
+        <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <h1 className="text-6xl font-bold mb-4">Selling Your Crops Become Simple</h1>
+          <p className="mb-8">Parkitup Provides You to book the Best Parking Slots Available at your desired Location</p>
+          <button onClick={() => setPopupOpen(true)} className="bg-white text-zinc-800 px-4 py-2 rounded">List New</button>
+        </div>
       </div>
 
       {/* Right section for listed crops */}
-      <div className="w-2/3 bg-gray-100 p-8">
-        <h2 className="text-2xl font-bold mb-4">Your Listed Crops</h2>
-        <div className="space-y-4">
-          {crops.length === 0 ? (
-            <p>No crops listed yet.</p>
-          ) : (
-            crops.map((crop) => (
-              <div key={crop.id} className="bg-green-200 p-4 rounded">
-                <h3 className="text-xl font-bold">{crop.name}</h3>
-                <p>Price: {crop.price}</p>
-                <p>Quantity: {crop.quantity}</p>
-                <p>Status: {crop.status}</p>
-                {/* Display the image */}
-                {crop.image && (
-                  <img src={crop.image} alt={crop.name} className="w-32 h-32 object-cover my-2" />
-                )}
-                {/* Link to crop detail page */}
-                <a href={`/crop/${crop.id}`} className="text-blue-500 underline">View Details</a>
-              </div>
-            ))
-          )}
+      <div className="w-2/3 pt-4 px-5">
+        <div className="border-y-2 border-zinc-200 pt-5">
+          <h2 className="text-6xl font-medium py-5">Your Listed Crops</h2>
         </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 px-5">
+  {crops.length === 0 ? (
+    <p className="text-center col-span-full">No crops are available at the moment. Please check back later.</p>
+  ) : (
+    crops.map((crop) => (
+      <div key={crop.id} className="bg-white border border-zinc-200 shadow-sm  overflow-hidden">
+        <img
+          src={crop.image}
+          alt={crop.name}
+          className="w-full h-[200px] object-cover"
+        />
+        <div className="p-4">
+          <h4 className="font-bold text-xl mb-2">{crop.name}</h4>
+          <p className="text-lg">Price: {crop.price}</p>
+          <a href={`/crop/${crop.id}`} className="text-green-600 hover:text-green-700">
+            View Details
+          </a>
+        </div>
+      </div>
+    ))
+  )}
+</div>
+
       </div>
 
       {/* Popup for adding new crop */}
