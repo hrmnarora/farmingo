@@ -59,7 +59,7 @@ function BuyerDashboard() {
                       <h4 className="font-bold text-xl mb-2">{crop.name}</h4>
                       <p className="text-lg">Price: {crop.price}</p>
                       <p className="text-md mb-2">Quantity: {crop.quantity}</p>
-                      <p className="text-gray-600">Description: {crop.description}</p>
+                      {/* <p className="text-gray-600">Description: {crop.description}</p> */}
                       <Link
                         to={`/crop/${crop.id}`}
                         className="text-zinc-600 hover:text-green-700"

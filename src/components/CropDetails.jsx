@@ -30,10 +30,10 @@ function CropDetail() {
 
   return (
     <div
-      className="h-screen flex justify-center items-center"
+      className="h-screen flex justify-center  items-center"
       style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover' }}
     >
-      <div className="bg-white p-8 rounded shadow-lg text-center">
+      <div className="bg-white w-[30vw] p-8 rounded shadow-lg flex flex-col items-center text-center">
         <h1 className="text-4xl font-bold mb-4">{crop.name}</h1>
         <p className="mb-2">Price: {crop.price}</p>
         <p className="mb-2">Quantity: {crop.quantity}</p>
@@ -45,7 +45,7 @@ function CropDetail() {
             <img
               src={crop.image}
               alt={crop.name}
-              className="w-64 h-64 object-cover mb-4"
+              className="w-64 h-64 items-center object-cover mb-4"
             />
           ) : (
             <p>No valid image available</p>
